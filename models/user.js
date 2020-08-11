@@ -27,6 +27,16 @@ module.exports = (sequelize, DataTypes) => {
           if (this.dataValues.name === '') {
             throw new Error("name can't be blank");
           }
+        }
+      }
+    },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+      validate: {
+        notNull: {
+          msg: 'Please enter your name'
         },
         emailValidator() {
           if (this.dataValues.email === '') {
@@ -35,7 +45,6 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    email: DataTypes.STRING,
     bio: DataTypes.TEXT
   }, {
     sequelize,
