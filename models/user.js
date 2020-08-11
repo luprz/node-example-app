@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
 
       models.User.hasMany(models.Book, { as: 'books' })
     }
-  };
+   };
   User.init({
     name: {
       type: DataTypes.STRING,

@@ -4,8 +4,7 @@ var models = require('../models')
 class UsersController {
   // GET /
   static async index(req, res, next) {
-    const users = await models.User.findAll({
-      include: [ 'books' ], order: [['id', 'DESC']]
+    const users = await models.User.findAll({include: [ 'books' ], order: [['id', 'DESC']]
     });
     res.json(users);
   }
