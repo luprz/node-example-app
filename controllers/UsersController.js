@@ -4,17 +4,19 @@ var models = require('../models')
 class UsersController {
   // GET /
   static async index(req, res, next) {
-    const users = await models.User.findAll({ order: [['id', 'DESC']] });
+    const users = await models.User.findAll({
+      include: [ 'books' ], order: [['id', 'DESC']]
+    });
     res.json(users);
   }
 
   // GET /:id
   static async show(req, res, next) {
-    await models.User.findByPk(req.params.id)
+    await models.User.findByPk(req.params.id, { include: [ 'books' ] })
       .then(user => {
         (user !== null)
           ? res.json(user)
-          : res.status(404).json({ no_found: `User with id=${req.params.id} not found` })
+          : res.status(404).json(notFound(req.params.id))
       })
   }
 
@@ -43,7 +45,7 @@ class UsersController {
             res.status(400).json(error.errors)
           })
         } else {
-          res.status(404).json({ no_found: `User with id=${req.params.id} not found` })
+          res.status(404).json(notFound(req.params.id))
         }
       })
   }
@@ -56,7 +58,7 @@ class UsersController {
           user.destroy();
           res.json(true);
         } else {
-          res.status(404).json({ no_found: `User with id=${req.params.id} not found` })
+          res.status(404).json(notFound(req.params.id))
         }
       })
   }
@@ -68,6 +70,10 @@ const userParams = (params) => {
     email: params.user.email,
     bio: params.user.bio
   }
+}
+
+const notFound = (id) => {
+  return { not_found: `User with id=${id} not found` }
 }
 
 module.exports = UsersController;
